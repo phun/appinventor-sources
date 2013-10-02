@@ -182,20 +182,48 @@ Blockly.Language.lists_is_empty = {
   typeblock: [{ translatedName: Blockly.LANG_LISTS_TITLE_IS_EMPTY }]
 };
 
-Blockly.Language.lists_pick_random_item = {
+Blockly.Language.lists_pick_an_item = {
   // Length of list.
   category : Blockly.LANG_CATEGORY_LISTS,
-  helpUrl : Blockly.LANG_LISTS_PICK_RANDOM_ITEM_HELPURL,
+  helpUrl : Blockly.LANG_LISTS_PICK_AN_ITEM_HELPURL,
   init : function() {
     this.setColour(Blockly.LIST_CATEGORY_HUE);
     this.setOutput(true, null);
-    this.appendValueInput('LIST').setCheck(Blockly.Language.YailTypeToBlocklyType("list",Blockly.Language.INPUT)).appendTitle('pick a random item').appendTitle('list');
-    Blockly.Language.setTooltip(this, Blockly.LANG_LISTS_PICK_RANDOM_TOOLTIP);
-    this.appendCollapsedInput().appendTitle('pick random', 'COLLAPSED_TEXT');
+    this.appendValueInput('LIST').setCheck(Blockly.Language.YailTypeToBlocklyType("list",Blockly.Language.INPUT))
+      .appendTitle(Blockly.LANG_LISTS_PICK_AN_ITEM_TITLE).appendTitle(new Blockly.FieldDropdown(this.OPERATORS), 'OP').appendTitle('list');
+    Blockly.Language.setTooltip(this, Blockly.LANG_LISTS_PICK_AN_ITEM_TOOLTIP);
+    this.appendCollapsedInput().appendTitle(this.getTitleValue('OP'), 'COLLAPSED_TEXT');
   },
   onchange: Blockly.WarningHandler.checkErrors,
-  typeblock: [{ translatedName: Blockly.LANG_LISTS_PICK_RANDOM_TITLE_PICK_RANDOM }]
+  typeblock: [{
+    translatedName: Blockly.LANG_LISTS_PICK_AN_ITEM_TITLE + ' ' + Blockly.LANG_LISTS_PICK_AN_ITEM_FIRST,
+    dropDown: {
+      titleName: 'OP',
+      value: 'FIRST'
+    }
+  },{
+    translatedName: Blockly.LANG_LISTS_PICK_AN_ITEM_TITLE + ' ' + Blockly.LANG_LISTS_PICK_AN_ITEM_LAST,
+    dropDown: {
+      titleName: 'OP',
+      value: 'LAST'
+    }
+  },{
+    translatedName: Blockly.LANG_LISTS_PICK_AN_ITEM_TITLE + ' ' + Blockly.LANG_LISTS_PICK_AN_ITEM_RANDOM,
+    dropDown: {
+      titleName: 'OP',
+      value: 'RANDOM'
+    }
+  }],
+  prepareCollapsedText: function(){
+    var titleFromOperator = Blockly.FieldDropdown.lookupOperator(this.OPERATORS, this.getTitleValue('OP'));
+    this.getTitle_('COLLAPSED_TEXT').setText(titleFromOperator, 'COLLAPSED_TEXT');
+  }
 };
+
+Blockly.Language.lists_pick_an_item.OPERATORS =
+  [[ 'first', 'FIRST' ],
+   [ 'last', 'LAST' ],
+   [ 'random', 'RANDOM' ]];
 
 Blockly.Language.lists_position_in = {
   // Postion of item in list.

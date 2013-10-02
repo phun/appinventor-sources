@@ -1036,6 +1036,8 @@
 ;;; Kludge based on Kawa compilation issues with 'not'
 (define (yail-not foo) (not foo))
 
+(define (yail-not-not foo) (not (not foo)))
+
 ;;; Coercion code
 ;;; Ex: (call-with-coerced-args string-append (list 1 2 3) '(text text text) "join")
 ;;; This is currently used only for primitives, which is why, unlike "call", we're
@@ -1847,6 +1849,19 @@ list, use the make-yail-list constructor with no arguments.
   (yail-list-get-item yail-list
               (random-integer 1  (yail-list-length yail-list))))
 
+(define (yail-list-pick-first yail-list)
+  (if (yail-list-empty? yail-list)
+      (signal-runtime-error
+       (format #f "Pick an item: Attempt to pick an element from an empty list")
+       "Invalid list operation"))
+  (yail-list-get-item yail-list 1))
+
+(define (yail-list-pick-last yail-list)
+  (if (yail-list-empty? yail-list)
+      (signal-runtime-error
+       (format #f "Pick an item: Attempt to pick an element from an empty list")
+       "Invalid list operation"))
+  (yail-list-get-item yail-list (yail-list-length yail-list)))
 
 ;; Implements Blocks foreach, which takes a Yail-list as argument
 ;; This is called by Yail foreach, defined in macros.scm
